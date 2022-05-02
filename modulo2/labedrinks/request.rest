@@ -1,0 +1,63 @@
+POST https://labedrink.herokuapp.com/drink
+Content-Type: application/json
+Authorization: quele-galdino-aragon
+{
+    "name": "suco",
+    "description": "gelada",
+"rating": 6
+},
+
+{
+"nome":"chocolate",
+"descriton": "quente",
+"rating": 7
+}
+
+###
+get https://labedrink.herokuapp.com/drink
+Authorization: quele-galdino-aragon
+
+{
+    "nome": "abac-lemon",
+    "descriptino": "abacaxi com limão",
+    "rating": 7
+}
+
+{
+    "nome": "maçã-lara",
+    "description": "suco de maçã com laranja",
+    "rating": 7
+}
+
+###
+PUT https://labedrink.herokuapp.com/drink/:id
+Content-Type: application/json
+Authorization: quele-galdino-aragon
+
+{
+    "nome": "morango-lei",
+    "description": "morango com leite gelado",
+    "rating": 5
+}
+
+{
+    "nome": "manga-mor",
+    "description": "manga com morango",
+    "rating": 5
+}
+
+###
+DELETE https://labedrink.herokuapp.com/drink/:id
+Authorization: quele-galdino-aragon
+
+{
+    "nome": "morango-lei",
+    "description": "morango com leite gelado",
+    "rating": 5
+}
+
+{
+    "nome": "manga-mor",
+    "description": "manga com morango",
+    "rating": 5
+}
