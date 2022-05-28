@@ -15,3 +15,12 @@ export const requestLogin = (email, password, navigate) => {
             console.log(error.message)
         })
 }
+export const deleteTrip=(tripId, getTripsData)=>{
+    const header={headers:{auth:localStorage.getItem("token")}}
+    axios.delete(`${BASE_URL}/${API_CLIENT}/trips/${tripId}`, header)
+    .then(()=>{
+        alert("viagem deletada")
+        // getTripsData()
+    })
+    .catch(error => alert(error.message))
+}
