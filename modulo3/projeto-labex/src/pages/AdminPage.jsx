@@ -8,6 +8,7 @@ import { goToHomePage } from "../routes/coordinator.jsx"
 import { createTrip, deleteTrip } from "../services/requests.jsx"
 import actualDate from "../utils/actualDate.jsx"
 import { planets } from "../constants/planets.jsx"
+
 export default function AdminPage() {
     const navigate = useNavigate()
     const [tripsData, getTripsData] = useRequestData("trips", {})

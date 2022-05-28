@@ -4,6 +4,7 @@ import useRequestData from "../hooks/useRequestData.jsx"
 import Header from "../components/Header.jsx"
 import TripCard from "../components/TripCard.jsx"
 import { goToAdminPage } from "../routes/coordinator.jsx"
+
 export default function HomePage() {
   const navigate = useNavigate()
   const [tripsData] = useRequestData("trips", {})

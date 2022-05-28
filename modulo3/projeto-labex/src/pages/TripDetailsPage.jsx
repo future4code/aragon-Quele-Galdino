@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import useRequestData from "../hooks/useRequestData.jsx"
 import { goToAdminPage, goToHomePage } from "../routes/coordinator.jsx"
+
 export default function TripDetailsPage() {
   const navigate = useNavigate()
   const params = useParams()

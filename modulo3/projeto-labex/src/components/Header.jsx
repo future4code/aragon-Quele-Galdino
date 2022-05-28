@@ -36,7 +36,7 @@ export default function Header(props) {
         )
     return (
         <header>
-                    <h1>Labex</h1>
+            <h1>Labex</h1>
             {renderHeader}
         </header>
     )
