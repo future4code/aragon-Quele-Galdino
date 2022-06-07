@@ -1,8 +1,12 @@
+import Header from "../components/header";
 
 export default function SignUpPage(){
     return (
-        <main>
-    
-        </main>
+<>
+<Header />
+<main>
+    <h1> página de cadastro</h1>
+</main>
+</>    
     )
     }

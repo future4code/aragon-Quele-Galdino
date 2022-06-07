@@ -1,8 +1,12 @@
+import Header from "../components/header";
 
-export default function LoginPage(){
+export default function LoginPage() {
     return (
-        <main>
-    
-        </main>
+        <>
+            <Header />
+            <main>
+                <h1> página de login</h1>
+            </main>
+        </>
     )
-    }
+}
