@@ -3,6 +3,7 @@ import Header from "../components/Header"
 import {useUnprotectedPage} from "../hooks/useUnprotectedPage"
 import {useForm} from "../hooks/useForm"
 import { requestSignup } from "../services/requests"
+import {goToLoginPage} from '../routes/coordinator'
 
 export default function SignUpPage() {
     useUnprotectedPage()
