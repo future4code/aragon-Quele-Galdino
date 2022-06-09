@@ -1,5 +1,8 @@
+import { GlobalState } from "./global/GlobalState.jsx"
 import Router from "./routes/Router.jsx"
 
 export default function App(){
-  return(<Router />)
+  return(<GlobalState>
+    <Router />
+  </GlobalState>)
 }    
