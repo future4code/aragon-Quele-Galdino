@@ -1,8 +1,7 @@
 import { format } from "date-fns"
 
 export default function PostCard(props) {
-  const { id, userId, title, body, createdAt, voteSum, commentCount } =
-    props.post
+    const { id, userId, title, body, createdAt, voteSum, commentCount } = props.post
   const date = createdAt && format(new Date(createdAt), "dd/MM/yyyy")
   return (
     <article>
