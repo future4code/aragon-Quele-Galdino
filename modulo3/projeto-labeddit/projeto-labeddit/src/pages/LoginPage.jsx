@@ -4,7 +4,7 @@ import {useUnprotectedPage} from "../hooks/useUnprotectedPage"
 import {useForm} from "../hooks/useForm"
 import {goToSignUpPage} from "../routes/coordinator"
 import { requestLogin } from "../services/requests"
-
+        
 export default function LoginPage() {
     useUnprotectedPage()
     const navigate = useNavigate()

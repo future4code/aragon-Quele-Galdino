@@ -7,7 +7,7 @@ import {useProtectedPage} from "../hooks/useProtectedPage"
 import {useForm} from "../hooks/useForm"
 import { goToFeedPage } from "../routes/coordinator"
 import { GlobalStateContext } from "../global/GlobalStateContest"
-
+        
 export default function PostDetailsPage() {
     useProtectedPage()
     const navigate = useNavigate()
@@ -77,4 +77,5 @@ export default function PostDetailsPage() {
         </main>
     )
 }
+        
         
