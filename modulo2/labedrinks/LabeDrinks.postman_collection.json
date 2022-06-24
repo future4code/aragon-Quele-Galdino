@@ -1,0 +1,184 @@
+{
+	"info": {
+		"_postman_id": "06a9d0a9-f2f5-4f2c-bc79-39cc559280a9",
+		"name": "LabeDrinks",
+		"description": "Esta API gerencia lista de drinks avaliados.\n\n# Instruções Gerais\n\n### Autenticação\n\nToda requisição deve ter uma identificação de quem está fazendo a requisição. Ela deve ser enviada por meio do header Authorization, da seguinte forma:\n\nAuthorization: nome-sobrenome-turma\n\nPor exemplo, se meu nome é Bob Marley e eu sou da turma Newton, o header deve ser:\n\nAuthorization: Bob-Marley-Newton",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetAllDrinks",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "nome-sobrenome-turma",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://labedrink.herokuapp.com/drink",
+					"protocol": "https",
+					"host": [
+						"labedrink",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"drink"
+					]
+				},
+				"description": "### Descrição:\n\nEsta requisição serve para ver todos os drinks registrados.\n\n### Input:\n\nHeaders: nome-sobrenome-turma\n\n### Output:\n\nRetorna uma lista de objetos com propriedades id, name, description e rating, onde:\n\nid = id do drink\n\nname = nome do drink\n\ndescription = detalhes sobre o drink\n\nrating = Nota do drink, de 0 a 10"
+			},
+			"response": []
+		},
+		{
+			"name": "GetDrinkById",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "nome-sobrenome-turma",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://labedrink.herokuapp.com/drink/:id",
+					"protocol": "https",
+					"host": [
+						"labedrink",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"drink",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "drinkId"
+						}
+					]
+				},
+				"description": "### Descrição:\n\nEsta requisição serve para ver um drink selecionado por seu id.\n\n### Input:\n\nHeaders: nome-sobrenome-turma\n\nParams: id\n\n### Output:\n\nRetorna um objeto com propriedades id, name, description e rating, onde:\n\nid = id do drink\n\nname = nome do drink\n\ndescription = detalhes sobre o drink\n\nrating = Nota do drink, de 0 a 10"
+			},
+			"response": []
+		},
+		{
+			"name": "CreateDrink",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "nome-sobrenome-turma",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"nome do drink\",\r\n    \"description\": \"detalhes do drink\",\r\n    \"rating\": \"nota, number de 0 a 10\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://labedrink.herokuapp.com/drink",
+					"protocol": "https",
+					"host": [
+						"labedrink",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"drink"
+					]
+				},
+				"description": "### Descrição:\n\nEsta requisição serve para criar um novo drink.\n\n### Input:\n\nHeaders: nome-sobrenome-turma\n\nBody: objeto com propriedades name, description e rating, onde:\n\nname = nome do drink\n\ndescription = detalhes sobre o drink\n\nrating = Nota do drink, de 0 a 10\n\n### Output:\n\nÉ esperado a mensagem \"Drink criado com sucesso!\" como resposta."
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateDrinkRating",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "nome-sobrenome-turma",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"rating\": \"nota, number de 0 a 10\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://labedrink.herokuapp.com/drink/:id",
+					"protocol": "https",
+					"host": [
+						"labedrink",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"drink",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "drinkId"
+						}
+					]
+				},
+				"description": "### Descrição:\n\nEsta requisição serve para alterar a nota de um drink.\n\n### Input:\n\nHeaders: nome-sobrenome-turma\n\nBody: objeto com propriedade rating, onde:\n\nrating = Nota do drink, de 0 a 10\n\n### Output:\n\nÉ esperado a mensagem \"Nota do Drink atualizado com sucesso!\" como resposta."
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteDrink",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "nome-sobrenome-turma",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://labedrink.herokuapp.com/drink/:id",
+					"protocol": "https",
+					"host": [
+						"labedrink",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"drink",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "drinkId"
+						}
+					]
+				},
+				"description": "### Descrição:\n\nEsta requisição serve para remover um drink da lista.\n\n### Input:\n\nHeaders: nome-sobrenome-turma\n\nParams: id\n\n### Output:\n\nÉ esperado a mensagem \"Drink removido com sucesso!\" como resposta."
+			},
+			"response": []
+		}
+	]
+}
