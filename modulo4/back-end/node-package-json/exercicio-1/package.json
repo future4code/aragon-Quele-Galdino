@@ -1,0 +1,13 @@
+{
+  "name": "exercicio-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "exercicio1.js",
+  "scripts": {
+    "exercicio1": "node ./exercicio1.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Quele Galdino",
+  "license": "ISC"
+}
