@@ -1,0 +1,20 @@
+### Endpoint de teste
+GET http://localhost:3003/ping
+
+### Endpoint users
+GET http://localhost:3003/users
+
+### Endpoint product
+GET http://localhost:3003/products
+
+### Endpoint porchase
+GET http://localhost:3003/porchase
+
+### Endpoint user
+POST http://localhost:3003/user
+
+### product
+POST http://localhost:3003/products
+
+### porchase
+POST http://localhost:3003/porchase
