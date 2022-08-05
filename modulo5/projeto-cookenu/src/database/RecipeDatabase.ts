@@ -1,5 +1,5 @@
-import { IRecipeDB, Recipe } from "../models/Recipe";
-import { BaseDatabase } from "./BaseDatabase";
+import { IRecipeDB, Recipe } from "../models/Recipe"
+import { BaseDatabase } from "./BaseDatabase"
 
 export class RecipeDatabase extends BaseDatabase {
     public static TABLE_RECIPES = "Cookenu_Recipes"
@@ -33,20 +33,20 @@ export class RecipeDatabase extends BaseDatabase {
             updated_at: recipe.getUpdatedAt(),
             creator_id: recipe.getCreatorId()
         }
-
-        await BaseDatabase.connection(RecipeDatabase.TABLE_RECIPES).update(newRecipe)
+        await BaseDatabase
+            .connection(RecipeDatabase.TABLE_RECIPES)
+            .update(newRecipe)
             .where({ id: newRecipe.id })
     }
 
     public findById = async (id: string) => {
         const result: IRecipeDB[] = await BaseDatabase.connection(RecipeDatabase.TABLE_RECIPES)
-            .select()
-            .where({ id })
+            .select().where({ id })
         return result[0]
     }
 
-    public deleteRecipe = async (id: string) => {
-await BaseDatabase.connection(RecipeDatabase.TABLE_RECIPES).delete()
-.where({id})
+    public deletRecipe = async (id: string) => {
+        await BaseDatabase.connection(RecipeDatabase.TABLE_RECIPES)
+            .delete().where({ id })
     }
 }

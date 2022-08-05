@@ -87,61 +87,92 @@ export class RecipeController {
         let errorCode = 400
         try {
             const token = req.headers.authorization
-            const id = req.params.id
-            const {title, description} = req.body
-            if(!token){
-errorCode = 422
-throw new Error ("ausencia de um parametro")
-
+            const { id } = req.params
+            const { title, description } = req.body
+            if (!token) {
+                errorCode = 422
+                throw new Error("Token ausente.")
             }
             const payload = new Authenticator().getTokenPayload(token)
-            if(!payload){
-errorCode = 401
-throw new Error ("token invalido")
+            if (!payload) {
+                errorCode = 401
+                throw new Error("Token inválido.")
             }
-          if (! title && !description){
-errorCode = 422
-throw new Error ("paràmetros ausentes")
-          }  
-          if (title && typeof title !== "string"){
-errorCode = 422
-throw new Error ("title tem que ser uma string")
-          }
-          if (description && typeof description !== "string"){
-errorCode = 422
-throw new Error ("description tem que ser uma string")
-          }
-          if (title && title.length <3) {
-throw new Error ("title deve possuir ao menos 3 caracteres")
-          }
-if (description && description.length <10){
-throw new Error ("description deve ter ao menos 10 caracteres")
-}
-const recipe = await new RecipeDatabase().findById(id)
-if (!recipe ){
-errorCode = 404
-throw new Error ("id não encontrada")
-}
-if (payload.role === USER_ROLES.NORMAL){
-if (payload.id !== recipe.creator_id){
-errorCode = 403
-throw new Error ("apenas admins podem editar as receitas que não sejam as suas")
-}
+            if (!title && !description) {
+                errorCode = 422
+                throw new Error("Não existe título e descrição.")
+            }
 
-}
-const newRecipe = new Recipe (recipe.id,
-    recipe.title,
-    recipe.description,
-    recipe.created_at,
-    (recipe.updated_at = new Date()),
-    recipe.creator_id
-    )
-    title && newRecipe.setTitle(title)
-    description && newRecipe.setDescription(description)
-    await new RecipeDatabase().editRecipe(newRecipe)
-    res.status(201).send({message: "receita criada com sucesso"}), 
-}catch (error) {
-            
+            if (title && typeof title !== "string") {
+                errorCode = 422
+                throw new Error("O título deve ser uma string.")
+            }
+
+            if (description && typeof description !== "string") {
+                errorCode = 422
+                throw new Error("A descrição deve ser uma string.")
+            }
+
+            if (title && title.length < 3) {
+                throw new Error("Título deve ter ao menos 3 caracteres.")
+            }
+
+            if (description && description.length < 10) {
+                throw new Error("Descrição deve que ter 10 ou mais caracteres.")
+            }
+            const recipe = await new RecipeDatabase().findById(id)
+            if (!recipe) {
+                errorCode = 404
+                throw new Error("Não foi possível encontrar a id informada.")
+            }
+
+            if (payload.role === USER_ROLES.NORMAL) {
+                if (payload.id !== recipe.creator_id) {
+                    errorCode = 403
+                    throw new Error("Somente adimin pode editar as outras receitas além das suas.")
+                }
+            }
+            const newRecipe = new Recipe(recipe.id, recipe.title, recipe.description, recipe.created_at, (recipe.updated_at = new Date()), recipe.creator_id)
+            title && newRecipe.setTitle(title)
+            description && newRecipe.setDescription(description)
+            await new RecipeDatabase().editRecipe(newRecipe)
+            res.status(201).send({ message: "Receita editada com sucesso.", newRecipe })
+        } catch (error) {
+            res.status(errorCode).send({ message: error.message })
         }
     }
+
+    public deletRecipe = async (req: Request, res: Response) => {
+        let errorCode = 400
+        try {
+            const token = req.headers.authorization
+            const authenticator = new Authenticator()
+            const payload = authenticator.getTokenPayload(token)
+            const recipeDatabase = new RecipeDatabase()
+            const { id } = req.params
+            const recipeId = await recipeDatabase.findById(id)
+            if (!payload) {
+                errorCode = 401
+                throw new Error("Token faltando.")
+            }
+            if (!recipeId) {
+                errorCode = 401
+                throw new Error("Receita não existe.")
+            }
+            if (payload.role === "NORMAL") {
+                if (recipeId.creator_id === payload.id) {
+                    await recipeDatabase.deletRecipe(payload.id)
+                }
+                errorCode = 401
+                throw new Error("usuário normal não pode deletar outras receitas a não ser as suas.")
+            }
+            if (payload.role === "ADMIN") {
+                await recipeDatabase.deletRecipe(id)
+            }
+            res.status(200).send({ message: "Usuário deletado com sucesso." })
+        } catch (error) {
+            res.status(errorCode).send({ message: error.message })
+        }
+    }
+
 }
