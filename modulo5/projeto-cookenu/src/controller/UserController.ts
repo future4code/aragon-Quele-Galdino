@@ -74,7 +74,7 @@ export class UserController {
             res.status(errorCode).send({ message: error.message })
         }
     }
-
+        
     public login = async (req: Request, res: Response) => {
         let errorCode = 400
         try {
