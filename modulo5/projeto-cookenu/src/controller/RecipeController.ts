@@ -4,7 +4,7 @@ import { Recipe } from "../models/Recipe";
 import { USER_ROLES } from "../models/User";
 import { Authenticator } from "../services/Authenticator";
 import { IdGenerator } from "../services/IdGenerator";
-
+        
 export class RecipeController {
     public getAllRecipes = async (req: Request, res: Response) => {
         let errorCode = 400
