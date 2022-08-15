@@ -9,4 +9,4 @@ describe("testando PostBusiness", () => {
      new IdGeneratorMock(),
       new HashManagerMock(),
       new AuthenticatorMock())
-})  
+})      
