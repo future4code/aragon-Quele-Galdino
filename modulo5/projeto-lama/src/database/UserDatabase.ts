@@ -3,7 +3,6 @@ import { BaseDatabase } from "./BaseDatabase"
 
 export class UserDatabase extends BaseDatabase {
     public static TABLE_USERS = "Lama_Users"
-
     public toUserDBModel = (user: User) => {
         const userDB: IUserDB = {
             id: user.getId(),
@@ -12,7 +11,6 @@ export class UserDatabase extends BaseDatabase {
             password: user.getPassword(),
             role: user.getRole()
         }
-
         return userDB
     }
 
@@ -21,7 +19,6 @@ export class UserDatabase extends BaseDatabase {
             .connection(UserDatabase.TABLE_USERS)
             .select()
             .where({ email })
-
         return result[0]
     }
 
@@ -32,5 +29,5 @@ export class UserDatabase extends BaseDatabase {
             .connection(UserDatabase.TABLE_USERS)
             .insert(userDB)
     }
-
 }
+

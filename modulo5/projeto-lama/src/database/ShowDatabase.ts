@@ -5,35 +5,57 @@ export class ShowDatabase extends BaseDatabase {
     public static TABLE_SHOWS = "Lama_Shows"
     public static TABLE_TICKETS = "Lama_Tickets"
 
-    public createShow = async (Show: Show) => {
-        const showDatabase = this.createShow(Show)
+    public getShow = async (
+        search: string,
+    sort: string,
+    limit: number,
+    offset: number
+    ) => {
+    const showDB: IShowDB[] = await BaseDatabase
+        .connection(ShowDatabase.TABLE_SHOWS)
+        .select()
+        .where(`band`, "LIKE", `%${search}%`)
+        .orderBy(`starts_at`, sort)
+        .limit(limit)
+        .offset(offset)
+    return showDB
+}
 
-        await BaseDatabase
-            .connection(ShowDatabase.TABLE_SHOWS)
-            .insert(showDatabase)
+    public createShow = async (show: Show) => {
+    const showDB: IShowDB = {
+        id: show.getId(),
+        band: show.getBand(),
+        starts_at: show.getStartsAt()
     }
+    await BaseDatabase
+        .connection(ShowDatabase.TABLE_SHOWS)
+        .insert(showDB)
+}
 
-    public getShows = async () => {
-        const showDatabase: IShowDB[] = await BaseDatabase
-            .connection(ShowDatabase.TABLE_SHOWS)
-            .select()
+    public findShowById = async (id: string) => {
+    const showDB: IShowDB[] = await BaseDatabase
+        .connection(ShowDatabase.TABLE_SHOWS)
+        .select()
+        .where({ id })
+    return showDB[0]
+}
 
-        return showDatabase
+    public updateShow = async (show: Show) => {
+    const showDB: IShowDB = {
+        id: show.getId(),
+        band: show.getBand(),
+        starts_at: show.getStartsAt()
     }
+    await BaseDatabase
+        .connection(ShowDatabase.TABLE_SHOWS)
+        .update(showDB)
+        .where({ id: showDB.id })
+}
 
-    public findShowById = async (showId: string): Promise<IShowDB | undefined> => {
-        const showDatabase: IShowDB[] = await BaseDatabase
-            .connection(ShowDatabase.TABLE_SHOWS)
-            .select()
-            .where({ id: showId })
-
-        return showDatabase[0]
-    }
-
-    public deleteShow = async (showId: string) => {
-        await BaseDatabase
-            .connection(ShowDatabase.TABLE_SHOWS)
-            .delete()
-            .where({ id: showId })
-    }
+    public deleteShowById = async (id: string) => {
+    await BaseDatabase
+        .connection(ShowDatabase.TABLE_SHOWS)
+        .delete()
+        .where({ id })
+}
 }
