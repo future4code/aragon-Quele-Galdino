@@ -16,4 +16,3 @@ const showController = new ShowController(
         new Authenticator()
     )
 )
-
