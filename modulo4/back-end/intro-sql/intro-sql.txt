@@ -1,0 +1,40 @@
+Exercicio 1
+
+CREATE TABLE Users (id VARCHAR(255) PRIMARY KEY, name VARCHAR(255), email VARCHAR(255))
+
+Exercicio 2
+
+INSERT INTO Users (id, name, email,);
+VALUES ("001", "Luana", "luana@lbn.com"),
+("002", "Vinicius", "vinicius@lbn.com"),
+("003", "Laura", "lau@lbn.com")
+
+Exercicio 3
+
+a)
+SELECT * FROM Users;
+
+b)
+SELECT id AS identifier, name FROM Users;
+
+c)
+SELECT * FROM USERS;
+WHERE id = "003";
+
+d)
+SELECT * FROM Users;
+WHERE name LIKE "%a%";
+
+e)
+SELECT * FROM Users;
+WHERE name NOT LIKE "%r%" AND email LIKE "%u%";
+
+Exercicio 4
+
+INSERT INTO Users (id, name, email);
+VALUES ("004", "Yuzo", "yuzo@lbn.com")
+
+DELETE FROM Users;
+WHERE id = "004";
+
+SELECT * FROM Users;

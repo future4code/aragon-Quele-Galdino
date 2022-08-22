@@ -7,3 +7,4 @@ function imprimeTresCoresFavoritas(): void {
     console.log([cor1, cor2, cor3])
 }
 
+    
