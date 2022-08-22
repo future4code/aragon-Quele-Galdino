@@ -1,0 +1,17 @@
+### Ping
+GET http://localhost:3003/ping
+
+### create perfume
+POST  http://localhost:3003/perfumes
+Content-Type: application/json
+
+{
+    "name": "green",
+    "brand": "Quele",
+    "price": 100,
+    "ml": 30
+}
+
+### get perfume
+PUT   http://localhost:3003/perfumes
+Content-Type: application/json
