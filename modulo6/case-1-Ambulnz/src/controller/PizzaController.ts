@@ -26,7 +26,7 @@ export class PizzaController {
         }
     }
 
-    public getShow = async (req: Request, res: Response) => {
+    public getPizza = async (req: Request, res: Response) => {
         try {
             const response = await this.pizzaBusiness.getPizza()
             res.status(200).send(response)
