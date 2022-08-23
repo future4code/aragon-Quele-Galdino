@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { RecipeDatabase } from "../database/RecipeDatabase";
-import { Recipe } from "../models/Recipe";
+import { RecipeDatabase } from "../database/PizzaDatabase";
+                        import { Recipe } from "../models/Pizza";
 import { USER_ROLES } from "../models/User";
 import { Authenticator } from "../services/Authenticator";
 import { IdGenerator } from "../services/IdGenerator";

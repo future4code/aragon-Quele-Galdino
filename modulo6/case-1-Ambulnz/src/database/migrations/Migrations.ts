@@ -1,7 +1,7 @@
 import { BaseDatabase } from "../BaseDatabase"
-import { RecipeDatabase } from "../RecipeDatabase"
+import { PizzaDatabase } from "../PizzaDatabase"
 import { UserDatabase } from "../UserDatabase"
-import { recipes, users } from "./data"
+import { pizza, users } from "./data"
 
 class Migrations extends BaseDatabase {
     execute = async () => {
@@ -31,13 +31,12 @@ class Migrations extends BaseDatabase {
         
         CREATE TABLE IF NOT EXISTS ${UserDatabase.TABLE_USERS}(
             id VARCHAR(255) PRIMARY KEY,
-            nickname VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
             role ENUM("NORMAL", "ADMIN") DEFAULT "NORMAL" NOT NULL
         );
 
-        CREATE TABLE IF NOT EXISTS ${RecipeDatabase.TABLE_RECIPES}(
+        CREATE TABLE IF NOT EXISTS ${PizzaDatabase.TABLE_PIZZAS}(
             id VARCHAR(255) PRIMARY KEY,
             title VARCHAR(255) NOT NULL,
             description VARCHAR(255) NOT NULL,
@@ -57,8 +56,8 @@ class Migrations extends BaseDatabase {
             .insert(users)
 
         await BaseDatabase
-            .connection(RecipeDatabase.TABLE_RECIPES)
-            .insert(recipes)
+            .connection(PizzaDatabase.TABLE_PIZZAS)
+            .insert(pizza)
     }
 }
 

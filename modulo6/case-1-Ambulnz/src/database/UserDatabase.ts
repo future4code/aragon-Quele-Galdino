@@ -1,7 +1,7 @@
 import { compileFunction } from "vm"
 import { IUserDB, User } from "../models/User"
 import { BaseDatabase } from "./BaseDatabase"
-import { RecipeDatabase } from "./RecipeDatabase"
+import { RecipeDatabase } from "./PizzaDatabase"
 
 export class UserDatabase extends BaseDatabase {
     public static TABLE_USERS = "Cookenu_Users"
@@ -9,7 +9,6 @@ export class UserDatabase extends BaseDatabase {
     public createUser = async (user: User) => {
         const userDB: IUserDB = {
             id: user.getId(),
-            nickname: user.getNickname(),
             email: user.getEmail(),
             password: user.getPassword(),
             role: user.getRole()

@@ -5,7 +5,6 @@ export enum USER_ROLES {
 
 export interface IUserDB {
     id: string,
-    nickname: string,
     email: string,
     password: string,
     role: USER_ROLES
@@ -14,7 +13,6 @@ export interface IUserDB {
 export class User {
     constructor(
         private id: string,
-        private nickname: string,
         private email: string,
         private password: string,
         private role: USER_ROLES
@@ -22,10 +20,6 @@ export class User {
 
     public getId = () => {
         return this.id
-    }
-
-    public getNickname = () => {
-        return this.nickname
     }
 
     public getEmail = () => {
@@ -42,10 +36,6 @@ export class User {
 
     public setId = (newId: string) => {
         this.id = newId
-    }
-
-    public setNickname = (newNickname: string) => {
-        this.nickname = newNickname
     }
 
     public setEmail = (newEmail: string) => {
