@@ -1,7 +1,7 @@
 import { BaseDatabase } from "../BaseDatabase"
 import { PizzaDatabase } from "../PizzaDatabase"
 import { UserDatabase } from "../UserDatabase"
-import { pizza, users } from "./data"
+import { orders, pizzas, users } from "./data"
 
 class Migrations extends BaseDatabase {
     execute = async () => {
@@ -16,7 +16,7 @@ class Migrations extends BaseDatabase {
 
             console.log("Migrations completed.")
         } catch (error) {
-            console.log("Error in migrations...")
+            console.log("FAILED! Error in migrations...")
             console.log(error.message)
         } finally {
             console.log("Ending connection...")
@@ -27,10 +27,13 @@ class Migrations extends BaseDatabase {
 
     createTables = async () => {
         await BaseDatabase.connection.raw(`
+        DROP TABLE IF EXISTS ${PizzaDatabase.TABLE_ORDERS};
+        DROP TABLE IF EXISTS ${PizzaDatabase.TABLE_PIZZAS};
         DROP TABLE IF EXISTS ${UserDatabase.TABLE_USERS};
         
         CREATE TABLE IF NOT EXISTS ${UserDatabase.TABLE_USERS}(
             id VARCHAR(255) PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
             role ENUM("NORMAL", "ADMIN") DEFAULT "NORMAL" NOT NULL
@@ -38,14 +41,20 @@ class Migrations extends BaseDatabase {
 
         CREATE TABLE IF NOT EXISTS ${PizzaDatabase.TABLE_PIZZAS}(
             id VARCHAR(255) PRIMARY KEY,
-            title VARCHAR(255) NOT NULL,
-            description VARCHAR(255) NOT NULL,
-            created_at DATE NOT NULL,
-            updated_at DATE NOT NULL,
-            creator_id VARCHAR(255) NOT NULL,
-            FOREIGN KEY (creator_id) REFERENES ${UserDatabase.TABLE_USERS}(id)
-            FOREIGN KEY (creator_id) REFERENCES ${UserDatabase.TABLE_USERS}(id)
-            ON DELETE CASCADE
+            name VARCHAR(255) NOT NULL,
+           ingredients VARCHAR(255) NOT NULL,
+           price DECIMAL(5,2) NOT NULL
+                   );
+
+        CREATE TABLE IF NOT EXISTS ${PizzaDatabase.TABLE_ORDERS}(
+            id VARCHAR(255) PRIMARY KEY,
+            created_at DATETIME NOT NULL,
+            delivered_at DATETIME,
+            pizza_id VARCHAR(255) NOT NULL,
+            user_id VARCHAR(255) NOT NULL,
+            total_price DECIMAL(5,2) NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES ${UserDatabase.TABLE_USERS}(id),
+            FOREIGN KEY (pizza_id) REFERENCES ${PizzaDatabase.TABLE_PIZZAS}(id)
         );
         `)
     }
@@ -57,7 +66,11 @@ class Migrations extends BaseDatabase {
 
         await BaseDatabase
             .connection(PizzaDatabase.TABLE_PIZZAS)
-            .insert(pizza)
+            .insert(pizzas)
+
+        await BaseDatabase
+            .connection(PizzaDatabase.TABLE_ORDERS)
+            .insert(orders)
     }
 }
 

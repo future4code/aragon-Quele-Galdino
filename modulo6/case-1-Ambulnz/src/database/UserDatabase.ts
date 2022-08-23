@@ -1,24 +1,20 @@
-import { compileFunction } from "vm"
 import { IUserDB, User } from "../models/User"
 import { BaseDatabase } from "./BaseDatabase"
-import { RecipeDatabase } from "./PizzaDatabase"
 
 export class UserDatabase extends BaseDatabase {
-    public static TABLE_USERS = "Cookenu_Users"
-
-    public createUser = async (user: User) => {
+    public static TABLE_USERS = "Ambulnz_Users"
+    public toUserDBModel = (user: User) => {
         const userDB: IUserDB = {
             id: user.getId(),
+            name: user.getName(),
             email: user.getEmail(),
             password: user.getPassword(),
             role: user.getRole()
         }
-        await BaseDatabase
-            .connection(UserDatabase.TABLE_USERS)
-            .insert(userDB)
+        return userDB
     }
 
-    public findByEmail = async (email: string) => {
+    public findByEmail = async (email: string): Promise<IUserDB | undefined> => {
         const result: IUserDB[] = await BaseDatabase
             .connection(UserDatabase.TABLE_USERS)
             .select()
@@ -26,20 +22,12 @@ export class UserDatabase extends BaseDatabase {
         return result[0]
     }
 
-    public findById = async (id: string) => {
-        const result: IUserDB[] = await BaseDatabase.connection(UserDatabase.TABLE_USERS)
-            .select().where({ id })
-        return result[0] ? true : false
-    }
+    public createUser = async (user: User) => {
+        const userDB = this.toUserDBModel(user)
 
-    public deletUser = async (id: string) => {
-        await BaseDatabase.connection(RecipeDatabase.TABLE_RECIPES).delete().where({ creator_id: id })
-        await BaseDatabase.connection(UserDatabase.TABLE_USERS).delete().where({ id })
-    }
-
-    public getAllUsers = async () => {
-        const userDB: IUserDB[] = await BaseDatabase.connection(UserDatabase.TABLE_USERS)
-            .select()
-        return userDB
+        await BaseDatabase
+            .connection(UserDatabase.TABLE_USERS)
+            .insert(userDB)
     }
 }
+

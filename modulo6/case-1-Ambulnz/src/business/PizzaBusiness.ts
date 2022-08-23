@@ -1,184 +1,100 @@
-import { PostDatabase } from "../database/PostDatabase"
-                import { IAddLikeInputDTO, IAddLikeOutputDTO, ICreatePostInputDTO, ICreatePostOutputDTO, IDeletePostInputDTO, IDeletePostOutputDTO, IGetPostsInputDTO, IGetPostsOutputDTO, ILikeDB, IRemoveLikeInputDTO, IRemoveLikeOutputDTO, Post } from "../models/Post"
+import { PizzaDatabase } from "../database/PizzaDatabase"
+import { ConflictError } from "../errors/ConflictError"
+import { ForbiddenError } from "../errors/ForbiddenError"
+import { RequestError } from "../errors/RequestError"
+import { UnauthorizedError } from "../errors/UnauthorizedError"
+import { ICreatePizzaInputDTO, ICreatePizzaOutputDTO, IDeletePizzaInputDTO, IDeletePizzaOutputDTO, IGetPizzaOutputDTO, IPizzaDB, Pizza } from "../models/Pizza"
 import { USER_ROLES } from "../models/User"
 import { Authenticator } from "../services/Authenticator"
 import { HashManager } from "../services/HashManager"
 import { IdGenerator } from "../services/IdGenerator"
 
-export class PostBusiness {
+export class PizzaBusiness {
     constructor(
-        private postDatabase: PostDatabase,
+        private pizzaDatabase: PizzaDatabase,
         private idGenerator: IdGenerator,
         private hashManager: HashManager,
         private authenticator: Authenticator
-    ) {}
+    ) { }
 
-    public createPost = async (input: ICreatePostInputDTO) => {
-        const { token, content } = input
-
+    public createPizza = async (input: ICreatePizzaInputDTO) => {
+        const { token, name, price, ingredients } = input
+        if (!token) {
+            throw new UnauthorizedError("Token inválido ou faltando")
+        }
         const payload = this.authenticator.getTokenPayload(token)
-
-        if (!payload) {
-            throw new Error("Não autenticado")
+        if (payload.role !== USER_ROLES.ADMIN) {
+            throw new ForbiddenError("Somente admins podem criar pizzas.")
         }
 
-        if (typeof content !== "string") {
-            throw new Error("Parâmetro 'content' inválido")
+        if (typeof name !== "string") {
+            throw new RequestError("Parâmetro name inválido: deve ser uma string")
         }
 
-        if (content.length < 1) {
-            throw new Error("Parâmetro 'content' inválido: mínimo de 1 caracteres")
+        if (name.length < 3) {
+            throw new RequestError("Parâmetro name inválido: mínimo de 3 caracter")
         }
 
-        const id = this.idGenerator.generate()
+        const createdAt = new Date(Date.now())
 
-        const post = new Post(
-            id,
-            content,
-            payload.id
+        const pizzaAlreadyExists = await this.pizzaDatabase.findPizzaByName(name)
+
+        if (pizzaAlreadyExists) {
+            throw new ConflictError("Essa pizza já existe.")
+        }
+
+        const pizza = new Pizza(
+            this.idGenerator.generate(),
+            name,
+            price,
+            ingredients
         )
 
-        await this.postDatabase.createPost(post)
-
-        const response: ICreatePostOutputDTO = {
-            message: "Post criado com sucesso",
-            post
-        }
-
+        await this.pizzaDatabase.createPizza(pizza)
+        const response: ICreatePizzaOutputDTO = { message: "Pizza criada com sucesso.", pizza }
         return response
     }
 
-    public getPosts = async (input: IGetPostsInputDTO) => {
-        const { token } = input
-
-        const payload = this.authenticator.getTokenPayload(token)
-
-        if (!payload) {
-            throw new Error("Não autenticado")
-        }
-
-        const postsDB = await this.postDatabase.getPosts()
-
-        const posts = postsDB.map(postDB => {
-            return new Post(
-                postDB.id,
-                postDB.content,
-                postDB.user_id
+    public getPizza = async (): Promise<IGetPizzaOutputDTO> => {
+        const pizzaDB: IPizzaDB[] = await this.pizzaDatabase.getPizza()
+        const pizzas = pizzaDB.map(pizzaDB => {
+            return new Pizza(
+                pizzaDB.id,
+                pizzaDB.name,
+                pizzaDB.price,
+                pizzaDB.ingredients
             )
         })
 
-        for (let post of posts) {
-            const postId = post.getId()
-            const likes = await this.postDatabase.getLikes(postId)
-            post.setLikes(likes)
+        for (let pizza of pizzas) {
+            const orders = await this.pizzaDatabase.getOrderById(pizza.getId())
+            orders.valueOf
         }
-
-        const response: IGetPostsOutputDTO = {
-            posts
+        const response: IGetPizzaOutputDTO = {
+            pizzas
         }
-
         return response
     }
 
-    public deletePost = async (input: IDeletePostInputDTO) => {
-        const { token, postId } = input
-
+    public deletePizza = async (input: IDeletePizzaInputDTO) => {
+        const { token, id } = input
         const payload = this.authenticator.getTokenPayload(token)
-
         if (!payload) {
             throw new Error("Não autenticado")
         }
-
-        const postDB = await this.postDatabase.findPostById(postId)
-
-        if (!postDB) {
-            throw new Error("Post não encontrado")
+        const pizzaDB = await this.pizzaDatabase.findPizzaById(id)
+        if (!pizzaDB) {
+            throw new Error("Pizza não encontrada")
         }
-
         if (payload.role === USER_ROLES.NORMAL) {
-            if (postDB.user_id !== payload.id) {
+            if (pizzaDB.id !== payload.id) {
                 throw new Error("Sem autorização")
             }
         }
-
-        await this.postDatabase.deletePost(postId)
-
-        const response: IDeletePostOutputDTO = {
-            message: "Post deletado com sucesso"
+        await this.pizzaDatabase.deletePizzaById(id)
+        const response: IDeletePizzaOutputDTO = {
+            message: "Pizza excluida com sucesso"
         }
-
-        return response
-    }
-
-    public addLike = async (input: IAddLikeInputDTO) => {
-        const { token, postId } = input
-
-        const payload = this.authenticator.getTokenPayload(token)
-
-        if (!payload) {
-            throw new Error("Não autenticado")
-        }
-
-        const postDB = await this.postDatabase.findPostById(postId)
-
-        if (!postDB) {
-            throw new Error("Post não encontrado")
-        }
-
-        const isAlreadyLiked = await this.postDatabase.findLike(
-            postId,
-            payload.id
-        )
-
-        if (isAlreadyLiked) {
-            throw new Error("Já deu like")
-        }
-
-        const likeDB: ILikeDB = {
-            id: this.idGenerator.generate(),
-            post_id: postId,
-            user_id: payload.id
-        }
-
-        await this.postDatabase.addLike(likeDB)
-
-        const response: IAddLikeOutputDTO = {
-            message: "Like realizado com sucesso"
-        }
-
-        return response
-    }
-
-    public removeLike = async (input: IRemoveLikeInputDTO) => {
-        const { token, postId } = input
-
-        const payload = this.authenticator.getTokenPayload(token)
-
-        if (!payload) {
-            throw new Error("Não autenticado")
-        }
-
-        const postDB = await this.postDatabase.findPostById(postId)
-
-        if (!postDB) {
-            throw new Error("Post não encontrado")
-        }
-
-        const isAlreadyLiked = await this.postDatabase.findLike(
-            postId,
-            payload.id
-        )
-
-        if (!isAlreadyLiked) {
-            throw new Error("Ainda não deu like")
-        }
-
-        await this.postDatabase.removeLike(postId, payload.id)
-
-        const response: IRemoveLikeOutputDTO = {
-            message: "Like removido com sucesso"
-        }
-
         return response
     }
 }

@@ -1,72 +1,96 @@
 export interface IPizzaDB {
     id: string,
-    pizza: string,
-    user_id: string
+    name: string,
+    ingredients: string,
+    price: number
 }
 
 export interface IOrderDB {
+    id: string,
     created_at: Date,
-    updated_at: Date,
-    creator_id: string,
-    totalprice: number
+    delivered_at: Date | null,
+    pizza_id: string,
+    user_id: string,
+    total_price: number
 }
 
 export class Order {
     constructor(
-        private created_at: Date,
-        private updated_at: Date,
-        private creator_id: string,
-        private totalprice: number
+        private id: string,
+        private createdAt: Date,
+        private pizzaId: string,
+        private userId: string,
+        private totalPrice: number,
+        private deliveredAt: Date = null
     ) { }
 
+    public getId = () => {
+        return this.id
+    }
+
+    public getPizzaId = () => {
+        return this.pizzaId
+    }
+
     public getCreatedAt = () => {
-        return this.created_at
+        return this.createdAt
     }
 
-    public getUpdatedAt = () => {
-        return this.updated_at
+    public getDeliveredAt = () => {
+        return this.deliveredAt
     }
 
-    public getCreatorId = () => {
-        return this.creator_id
+    public getUserId = () => {
+        return this.userId
+    }
+
+    public getTotalPrice = () => {
+        return this.totalPrice
+    }
+
+    public setId = (newId: string) => {
+        this.id = newId
+    }
+
+    public setPizzaId = (newPizzaId: string) => {
+        this.pizzaId = newPizzaId
+    }
+
+    public setTotalPrice = (newTotalPrice: number) => {
+        this.totalPrice = newTotalPrice
     }
 
     public setCreatedAt = (newCreatedAt: Date) => {
-        this.created_at = newCreatedAt
+        this.createdAt = newCreatedAt
     }
 
-    public setUpdatedAt = (newUpdatedAt: Date) => {
-        this.updated_at = newUpdatedAt
+    public setDeliveredAt = (newDeliveredAt: Date) => {
+        this.deliveredAt = newDeliveredAt
     }
 
-    public setCreatorId = (newCreatorId: string) => {
-        this.creator_id = newCreatorId
+    public setUserId = (newUserId: string) => {
+        this.userId = newUserId
     }
 }
 
 export class Pizza {
     constructor(
         private id: string,
-        private user_id: string,
-        private ingredients: string,
-        private flavor: string,
-        private price: number
+        private name: string,
+        private price: number,
+        private ingredients: string
     ) { }
-
-    public getPrice = () => {
-        return this.price
-    }
-
     public getId = () => {
         return this.id
     }
 
-    public getUserId = () => {
-        return this.user_id
+
+    public getName = () => {
+        return this.name
     }
 
-    public getPizzas = () => {
-        return this.flavor
+    public getPrice = () => {
+        return this.price
     }
 
     public getIngredients = () => {
@@ -77,11 +101,18 @@ export class Pizza {
         this.id = newId
     }
 
-    public setPizza = (newFlavor: string) => {
-        this.flavor = newFlavor
+    public setName = (newName: string) => {
+        this.name = newName
+    }
+
+    public setPrice = (newPrice: number) => {
+        this.price = newPrice
+    }
+
+    public setIngredients = (newIngredients: string) => {
+        this.ingredients = newIngredients
     }
 }
-
 
 export interface IGetPizzaInputDTO {
     token: string,
@@ -99,24 +130,38 @@ export interface IDeletePizzaInputDTO {
 
 export interface ICreatePizzaInputDTO {
     token: string,
-    id: string,
-    user_id: string,
-    flavor: string,
+    name: string,
     price: number,
     ingredients: string
 }
 
 export interface ICreatePizzaOutputDTO {
     message: string,
-    pizza: Pizza[]
+    pizza: Pizza
 }
 
 export interface IDeletePizzaOutputDTO {
-    id: string,
     message: string
 }
 
 export interface IGetPizzaOutputDTO {
-    pizza: Pizza[]
+    pizzas: Pizza[]
 }
 
+export interface ICreateOrderInputDTO {
+    token: string,
+    pizzaId: string
+}
+
+export interface ICreateOrderOutputDTO {
+    message: string
+}
+
+export interface IConfirmDeliveryInputDTO {
+    token: string,
+    orderId: string
+}
+
+export interface IConfirmDeliveryOutputDTO {
+    message: string
+}

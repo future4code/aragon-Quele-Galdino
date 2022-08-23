@@ -1,51 +1,81 @@
-import { IPizzaDB, Pizza } from "../models/Pizza"
+import { IOrderDB, IPizzaDB, Pizza } from "../models/Pizza"
 import { BaseDatabase } from "./BaseDatabase"
 
 export class PizzaDatabase extends BaseDatabase {
-    public static TABLE_PIZZAS = "Ambulnz_Pizza"
+    public static TABLE_PIZZAS = "Ambulnz_Pizzas"
+    public static TABLE_ORDERS = "Ambulnz_Orders"
 
-    public getAllPizzas = async () => {
-        const pizzaDB: IPizzaDB[] = await BaseDatabase
+    public toPizzasDBModel = (pizza: Pizza): IPizzaDB => {
+        const pizzaDB: IPizzaDB = {
+            id: pizza.getId(),
+            name: pizza.getName(),
+            price: pizza.getPrice(),
+            ingredients: pizza.getIngredients()
+        }
+        return pizzaDB
+    }
+
+
+    public getPizza = async (): Promise<IPizzaDB[]> => {
+        const result: IPizzaDB[] = await BaseDatabase
             .connection(PizzaDatabase.TABLE_PIZZAS)
             .select()
-
-        return PizzaDatabase
+        return result
     }
 
-    public createPizza = async (pizza: Pizza) => {
-        const newPizza: IPizzaDB = {
-            id: pizza.getId(),
-            description: pizza.getDescription(),
-            created_at: pizza.getCreatedAt(),
-            updated_at: pizza.getUpdatedAt(),
-            creator_id: pizza.getCreatorId()
-        }
-        await BaseDatabase.connection(PizzaDatabase.TABLE_PIZZAS).insert(newPizza)
+    public getOrderById = async (pizzaId: string): Promise<number> => {
+        const result: IPizzaDB[] = await BaseDatabase
+            .connection(PizzaDatabase.TABLE_ORDERS)
+            .select()
+            .where({ pizza_id: pizzaId })
+        return result.length
     }
 
-    public editpizza = async (pizza: Pizza) => {
-        const newPizza: IPizzaDB = {
+    public createPizza = async (pizza: Pizza): Promise<void> => {
+        const pizzaDB: IPizzaDB = {
             id: pizza.getId(),
-            title: pizza.getTitle(),
-            description: recipe.getDescription(),
-            created_at: pizza.getCreatedAt(),
-            updated_at: recipe.getUpdatedAt(),
-            creator_id: pizza.getCreatorId()
+            name: pizza.getName(),
+            price: pizza.getPrice(),
+            ingredients: pizza.getIngredients()
         }
         await BaseDatabase
             .connection(PizzaDatabase.TABLE_PIZZAS)
-            .update(newPizza)
-            .where({ id: newPizza.id })
+            .insert(pizzaDB)
     }
 
-    public findById = async (id: string) => {
-        const result: IPizzaDB[] = await BaseDatabase.connection(PizzaDatabase.TABLE_PIZZASTABLE_PIZZAS)
-            .select().where({ id })
-        return result[0]
+    public findPizzaById = async (id: string): Promise<IPizzaDB | undefined> => {
+        const pizzaDB: IPizzaDB[] = await BaseDatabase
+            .connection(PizzaDatabase.TABLE_PIZZAS)
+            .select()
+            .where({ id })
+        return pizzaDB[0]
     }
 
-    public deletPizza = async (id: string) => {
-        await BaseDatabase.connection(PizzaDatabase.TABLE_PIZZAS)
-            .delete().where({ id })
+    public updatePizza = async (pizza: Pizza): Promise<void> => {
+        const pizzaDB: IPizzaDB = {
+            id: pizza.getId(),
+            name: pizza.getName(),
+            price: pizza.getPrice(),
+            ingredients: pizza.getIngredients()
+        }
+        await BaseDatabase
+            .connection(PizzaDatabase.TABLE_PIZZAS)
+            .update(pizzaDB)
+            .where({ id: pizzaDB.id })
+    }
+
+    public deletePizzaById = async (id: string): Promise<void> => {
+        await BaseDatabase
+            .connection(PizzaDatabase.TABLE_PIZZAS)
+            .delete()
+            .where({ id })
+    }
+
+    public findPizzaByName = async (name: string): Promise<IPizzaDB | undefined> => {
+        const pizzaDB: IPizzaDB[] = await BaseDatabase
+            .connection(PizzaDatabase.TABLE_PIZZAS)
+            .select()
+            .where({ name })
+        return pizzaDB[0]
     }
 }
