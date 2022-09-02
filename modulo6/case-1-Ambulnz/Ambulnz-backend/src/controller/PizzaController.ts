@@ -31,6 +31,7 @@ export class PizzaController {
             const response = await this.pizzaBusiness.getPizza()
             res.status(200).send(response)
         } catch (error: unknown) {
+            console.log(error)
             if (error instanceof BaseError) {
                 return res.status(error.statusCode).send({ message: error.message })
             }
