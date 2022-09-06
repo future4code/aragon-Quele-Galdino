@@ -1,9 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "../pages/homePage/HomePage";
-import SignupPage from "../pages/SignupPage/SignupPage";
-import CartPage from "../pages/cartPage/CartPage";
 import ErrorPage from "../pages/errorPage/ErrorPage";
-import LoginPage from "../pages/LoginPage/LoginPage";
+import LoginPage from "../pages/loginPage/LoginPage";
+import MenuPage from "../pages/menuPage/MenuPage";
+import OrdersPage from "../pages/orderPage/ordersPage";
+import SignupPage from "../pages/signupPage/SignupPage";
 
 function Router() {
   return (
