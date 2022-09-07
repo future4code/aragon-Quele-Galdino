@@ -1,0 +1,23 @@
+# iwfs-diversidev
+Repositório criado para armazenamento do conteúdo para pessoas que utilizam o NVDA
+
+## Link das Aulas e Warmups Segunda - Sexta
+https://meet.google.com/jts-hzsz-fbx
+
+## Formulário de Entrega
+https://docs.google.com/forms/d/1FDeGJxxp2IC3AVU-_JRSsyacq7BGL2qZpjtPWFATBgk/edit
+
+## Formulário de Feedback Segunda - Quinta
+https://docs.google.com/forms/d/1KGxndA2la5kbeNlm_nq2DZ_f0IbGpyxOk4TTZWi-hUg/edit
+
+## Formulário de Feedback Sexta
+https://docs.google.com/forms/d/1X4TUMgL8r0ZTEvH-Elcs-U_Mc6op_I6bjA2GF85SgMQ/edit
+
+## Calendário do Plantão de Dúvidas: Segunda - Quinta
+Plantão das 14:00 até às 16:00
+
+## Link dos Plantões de Dúvidas
+https://meet.google.com/naw-funm-tva
+
+### Link do Github
+https://github.com/future4code/aragon-Quele-Galdino
